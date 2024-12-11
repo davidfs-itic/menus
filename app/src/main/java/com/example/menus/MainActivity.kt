@@ -4,19 +4,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var  toolbar :Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
 
         val trans=this.supportFragmentManager.beginTransaction()
         trans.replace(R.id.main_fragment,MainFragment())
@@ -32,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                     trans.addToBackStack(null)
                     trans.setReorderingAllowed(true)
                     trans.commit()
+                    toggle.setDrawerIndicatorEnabled(false);
                     Log.i("mainactivity","Afegit fragment")
                 }
                 R.id.bottom_home->{
@@ -44,10 +52,36 @@ class MainActivity : AppCompatActivity() {
              true
         }
 
-        setSupportActionBar(findViewById(R.id.main_toolbar))
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
+        toolbar=findViewById(R.id.main_toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        drawerLayout = findViewById(R.id.main_drawerlayout)
+        toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        var navigationView: NavigationView =findViewById(R.id.navigationView)
+        navigationView.setNavigationItemSelectedListener(this::navigationItemSelectedListener)
     }
+
+    private fun navigationItemSelectedListener(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.alt_nav_home -> {
+                Toast.makeText(this, "alt_nav_home", Toast.LENGTH_SHORT).show()
+            }
+            R.id.alt_nav_gallery -> {
+                Toast.makeText(this, "alt_nav_gallery", Toast.LENGTH_SHORT).show()
+            }
+            R.id.alt_nav_slideshow -> {
+                Toast.makeText(this, "alt_nav_slideshow", Toast.LENGTH_SHORT).show()
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         //this.onBackPressed()
