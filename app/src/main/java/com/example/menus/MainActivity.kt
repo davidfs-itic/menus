@@ -93,7 +93,22 @@ class MainActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        return super.onCreateOptionsMenu(menu)
+        getMenuInflater().inflate(R.menu.menu_appbar, menu);
+        return true;
+        //return super.onCreateOptionsMenu(menu)
     }
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if (true) {
+            var item = menu?.findItem(R.id.appbar_nav_home)
+            item?.setEnabled(false)
+            Log.i("Toolbaronly_prepareoptionsmenu", item?.title.toString())
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.i("onOptionsItemSelected",item.itemId.toString())
+        return super.onOptionsItemSelected(item)
+    }
+
 }
